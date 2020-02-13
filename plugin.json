@@ -2,7 +2,7 @@
 	"id": "nodebb-plugin-sso-oidc",
 	"name": "NodeBB OpenID Connect SSO",
 	"description": "NodeBB Plugin that allows users to login/register via their OpenID Connect account.",
-	"url": "https://github.com/julianlam/nodebb-plugin-sso-facebook",
+	"url": "https://github.com/Alexkin2609/nodebb-plugin-sso-oidc#readme",
 	"library": "./library.js",
 	"templates": "templates",
 	"hooks": [
