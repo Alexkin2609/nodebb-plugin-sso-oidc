@@ -6,6 +6,8 @@
         meta = require.main.require('./src/meta'),
         db = require.main.require('./src/database')
         passport = module.parent.require('passport'),
+        winston.info('passport:');
+        winston.info(passport);
         nconf = module.parent.require('nconf'),
         winston = module.parent.require('winston'),
         { Issuer, Strategy, custom } = require('openid-client'),
