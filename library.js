@@ -13,7 +13,7 @@
         AUTH_OIDC_LOGIN_PATH = `${AUTH_OIDC_BASE_PATH}/login`,
         AUTH_OIDC_CALLBACK_PATH = `${AUTH_OIDC_BASE_PATH}/callback`,
         CLOCK_TOLERANCE = 10,
-        controllers = require('./lib/controllers');
+        controllers = require('./src/controllers');
 
     var authenticationController = require.main.require('./src/controllers/authentication');
 
