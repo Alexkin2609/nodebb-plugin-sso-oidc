@@ -5,18 +5,17 @@
     var user = require.main.require('./src/user'),
         meta = require.main.require('./src/meta'),
         db = require.main.require('./src/database')
-        passport = module.parent.require('passport'),
+        passport = require.main.require('passport'),
         winston.info('passport:');
         winston.info(passport);
-        nconf = module.parent.require('nconf'),
-        winston = module.parent.require('winston'),
+        nconf = require.main.require('nconf'),
+        winston = require.main.require('winston'),
         { Issuer, Strategy, custom } = require('openid-client'),
         AUTH_OIDC_BASE_PATH = '/auth/oidc',
         AUTH_OIDC_LOGIN_PATH = `${AUTH_OIDC_BASE_PATH}/login`,
         AUTH_OIDC_CALLBACK_PATH = `${AUTH_OIDC_BASE_PATH}/callback`,
         CLOCK_TOLERANCE = 10,
-        controllers = require('./lib/controllers'),
-        { UserHelper, SettingsHelper } = require('./lib/helpers');
+        controllers = require('./lib/controllers');
 
     var authenticationController = require.main.require('./src/controllers/authentication');
 
