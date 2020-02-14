@@ -1,7 +1,7 @@
 (function (module) {
-	'use strict';
-    /* globals module, require */
+    'use strict';
 
+    /* globals module, require */
     var user = require.main.require('./src/user'),
         meta = require.main.require('./src/meta'),
         db = require.main.require('./src/database')
@@ -105,7 +105,7 @@
             winston.info(JSON.stringify(Oidc.settings));
 
             winston.verbose('[oidc] Fetching OpenID Connect Issuer informations ...');
-            const issuer = await Issuer.discover(Oidc.settings.discover_url);
+            const issuer = Issuer.discover(Oidc.settings.discover_url);
             winston.verbose('[oidc] Creating OpenID Connect Passport Strategy ...');
 
             const client = new issuer.Client({
@@ -138,14 +138,14 @@
                 winston.verbose('Verifing after SSO response...');
                 try {
                     const claims = tokenSet.claims();
-                    let uid = await Oidc.getDbObjectField('oidc:uid', hash(claims.iss, subject));
+                    let uid = Oidc.getDbObjectField('oidc:uid', hash(claims.iss, subject));
 
                     if (config.matchUserByEmail && !uid) {
                         winston.verbose('No user found, but checking if an user with the same email exists...');
-                        uid = await Oidc.getUidByEmail(claims.email);
+                        uid = Oidc.getUidByEmail(claims.email);
                         if (uid) {
                             winston.verbose('Found corresponding user, merging...');
-                            await Oidc.merge(uid, {
+                            Oidc.merge(uid, {
                                 oidcIssuer: claims.iss,
                                 oidcSubject: claims.sub,
                             });
@@ -159,7 +159,7 @@
                     }
 
                     winston.verbose(`User not found, creating new one.`);
-                    uid = await Oidc.create({
+                    uid = Oidc.create({
                         username: claims.preferred_username || claims.email,
                         email: String(claims.email).toLowerCase(),
                         oidcIssuer: claims.iss,
