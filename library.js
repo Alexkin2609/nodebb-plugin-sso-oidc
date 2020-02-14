@@ -5,9 +5,7 @@
     var user = require.main.require('./src/user'),
         meta = require.main.require('./src/meta'),
         db = require.main.require('./src/database')
-        passport = require.main.require('passport'),
-        winston.info('passport:');
-        winston.info(passport);
+        passport = require('passport'),
         nconf = require.main.require('nconf'),
         winston = require.main.require('winston'),
         { Issuer, Strategy, custom } = require('openid-client'),
