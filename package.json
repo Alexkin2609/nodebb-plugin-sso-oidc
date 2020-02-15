@@ -19,8 +19,7 @@
   "author": "Alexkin Skywalker",
   "license": "ISC",
   "dependencies": {
-    "openid-client": "^3.12.2",
-    "passport": "^0.4.1"
+    "openid-client": "^3.12.2"
   },
   "nbbpm": {
     "compatibility": "^1.7.1"

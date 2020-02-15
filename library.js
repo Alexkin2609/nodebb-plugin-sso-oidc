@@ -185,8 +185,9 @@
             });
 
             winston.verbose('[oidc] Strategy initialized ...');
-            return strategies;
         }
+
+        callback(null, strategies);
 	};
 
     Oidc.addMenuItem = function(custom_header, callback) {
