@@ -12,8 +12,7 @@
         AUTH_OIDC_BASE_PATH = '/auth/oidc',
         AUTH_OIDC_LOGIN_PATH = `${AUTH_OIDC_BASE_PATH}/login`,
         AUTH_OIDC_CALLBACK_PATH = `${AUTH_OIDC_BASE_PATH}/callback`,
-        CLOCK_TOLERANCE = 10,
-        controllers = require('./src/controllers');
+        CLOCK_TOLERANCE = 10;
 
     var authenticationController = require.main.require('./src/controllers/authentication');
 
@@ -176,18 +175,18 @@
             winston.info(JSON.stringify(strategy));
 
             passport.use(strategy.name, strategy);
+
+            strategies.push({
+                name: strategy.name,
+                url: AUTH_OIDC_LOGIN_PATH,
+                callbackURL: AUTH_OIDC_CALLBACK_PATH,
+                icon: 'fa-openid',
+                scope: 'openid email profile',
+            });
+
+            winston.verbose('[oidc] Strategy initialized ...');
+            return strategies;
         }
-
-        strategies.push({
-            name: strategy.name,
-            url: AUTH_OIDC_LOGIN_PATH,
-            callbackURL: AUTH_OIDC_CALLBACK_PATH,
-            icon: 'fa-openid',
-            scope: 'openid email profile',
-        });
-
-        winston.verbose('[oidc] Strategy initialized ...');
-        return strategies;
 	};
 
     Oidc.addMenuItem = function(custom_header, callback) {
