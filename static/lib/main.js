@@ -8,7 +8,7 @@ define('sso-oidc/login', function () {
 	var Login = {};
 
 	Login.init = function () {
-		var replaceEl = $('.alt-logins .oidc a i');
+		var replaceEl = $('.alt-logins .openidconnect a i');
 		var replacement = document.createElement('div');
 		var image = document.createElement('img');
 		image.src = config.relative_path + '/plugins/nodebb-plugin-sso-oidc/images/logotipo-tergar-horizontal.svg';
@@ -18,4 +18,4 @@ define('sso-oidc/login', function () {
 	}
 
 	return Login;
-})
+});

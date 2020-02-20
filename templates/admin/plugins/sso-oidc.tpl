@@ -6,7 +6,7 @@
 				<p>
 					Use your <strong>OpenID Connect Client</strong> data
 					from the OpenID Connect server and then paste your
-					application details here.
+					client details here.
 				</p>
 				<ul>
 					<li>
@@ -20,7 +20,7 @@
 						<input type="text" id="discover_url" name="discover_url" title="Discover URL" class="form-control" placeholder="Discover URL">
 					</div>
 					<div class="form-group">
-						<label for="app_id">Client ID</label>
+						<label for="client_id">Client ID</label>
 						<input type="text" id="client_id" name="client_id" title="Client ID" class="form-control" placeholder="Client ID"><br />
 					</div>
 					<div class="form-group">
