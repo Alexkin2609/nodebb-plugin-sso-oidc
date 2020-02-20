@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-sso-oidc",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "NodeBB Plugin that allows users to login/register via their OpenID Connect account.",
   "main": "library.js",
   "scripts": {
