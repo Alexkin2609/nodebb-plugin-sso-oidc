@@ -78,12 +78,15 @@
     */
     Oidc.getStrategy = function (strategies, callback) {
         winston.info('Setting up openid strategy');
-        if (Oidc.settings.client_id && Oidc.settings.client_secret) {
+        if (Oidc.settings !== undefined &&
+			Oidc.settings.client_id && Oidc.settings.client_secret &&
+			Oidc.settings.base_url && Oidc.settings.login_authorize &&
+			Oidc.settings.token && Oidc.settings.user_info) {
             passport.use(new passportOpenID({
-                issuer: 'https://toid.tergar.org',
-                authorizationURL: 'https://toid.tergar.org/oxauth/restv1/authorize',
-                tokenURL: 'https://toid.tergar.org/oxauth/restv1/token',
-                userInfoURL: 'https://toid.tergar.org/oxauth/restv1/userinfo',
+                issuer: Oidc.settings.base_url,
+                authorizationURL: Oidc.settings.login_authorize,
+                tokenURL: Oidc.settings.token,
+                userInfoURL: Oidc.settings.user_info,
                 clientID: Oidc.settings.client_id,
                 clientSecret: Oidc.settings.client_secret,
                 callbackURL: nconf.get('url') + '/auth/oidc/callback',
@@ -153,7 +156,7 @@
 					}
 
 					if (!uid) {
-                        username = username.split("@");
+                        username = username.split('@');
 						winston.info('Creating user...');
 						user.create({ username: username[0], email: email }, function (err, uid) {
 							if (err) {

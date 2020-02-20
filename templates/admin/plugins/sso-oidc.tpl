@@ -16,21 +16,33 @@
 				</ul>
 				<form role="form" class="sso-oidc-settings">
 					<div class="form-group">
-						<label for="discover_url">Discover URL</label>
-						<input type="text" id="discover_url" name="discover_url" title="Discover URL" class="form-control" placeholder="Discover URL">
-					</div>
-					<div class="form-group">
-						<label for="client_id">Client ID</label>
+						<label for="client_id"><code>*</code> Client ID</label>
 						<input type="text" id="client_id" name="client_id" title="Client ID" class="form-control" placeholder="Client ID"><br />
 					</div>
 					<div class="form-group">
-						<label for="client_secret">Client Secret</label>
+						<label for="client_secret"><code>*</code> Client Secret</label>
 						<input type="text" id="client_secret" name="client_secret" title="Client Secret" class="form-control" placeholder="Client Secret">
+					</div>
+					<div class="form-group">
+						<label for="base_url"><code>*</code> OpenID Connect Provider Base URL (Issuer)</label>
+						<input type="text" id="base_url" name="base_url" title="Base URL" class="form-control" placeholder="https://my.domain.com">
+					</div>
+					<div class="form-group">
+						<label for="login_authorize"><code>*</code> Authorization Endpoint</label>
+						<input type="text" id="login_authorize" name="login_authorize" title="Authorization" class="form-control" placeholder="https://my.domain.com/authorize">
+					</div>
+					<div class="form-group">
+						<label for="token"><code>*</code> Token Validation Endpoint</label>
+						<input type="text" id="token" name="token" title="Token Validation" class="form-control" placeholder="https://my.domain.com/token">
+					</div>
+					<div class="form-group">
+						<label for="user_info"><code>*</code> UserInfo Endpoint</label>
+						<input type="text" id="user_info" name="user_info" title="UserInfo" class="form-control" placeholder="https://my.domain.com/userinfo">
 					</div>
 					<div class="checkbox">
 						<label for="matchUser" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
 							<input type="checkbox" class="mdl-switch__input" id="matchUser" name="matchUser" />
-							<span class="mdl-switch__label">Match User by Email</span>
+							<span class="mdl-switch__label">Match existing user by Email</span>
 						</label>
 					</div>
 					<p class="help-block">
