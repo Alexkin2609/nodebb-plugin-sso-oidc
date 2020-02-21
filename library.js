@@ -7,7 +7,7 @@
         passport = require.main.require('passport'),
         passportOpenID = require('passport-openidconnect').Strategy,
         nconf = require.main.require('nconf'),
-        async = require.main.require('async'),
+        //async = require.main.require('async'),
         winston = require.main.require('winston');
 
     var authenticationController = require.main.require('./src/controllers/authentication');
@@ -95,14 +95,12 @@
             }, function (req, iss, sub, profile, accessToken, refreshToken, verified) {
 				if (req.hasOwnProperty('user') && req.user.hasOwnProperty('uid') && req.user.uid > 0) {
 					// Save specific information to the user
-					winston.info('entering to has own property');
 					User.setUserField(req.user.uid, 'oidcid', profile.id);
 					db.setObjectField('oidcid:uid', profile.id, req.user.uid);
 					return verified(null, req.user);
 				}
 
 				Oidc.login(profile.id, profile._json.user_name, profile._json.email, function (err, user) {
-					winston.info('Login user...');
 					if (err) {
 						return verified(err);
 					}
@@ -124,8 +122,15 @@
         callback(null, strategies);
     };
 
+	/**
+    *   Logins a user.
+    *
+    *   @param {String} oidcid
+    *   @param {String} username
+	*   @param {String} email
+    *   @param {Function} callback
+    */
     Oidc.login = function (oidcid, username, email, callback) {
-		winston.info('Entering to login function...');
 		Oidc.getUidByOidc(oidcid, function (err, uid) {
 			if (err) {
 				return callback(err);
@@ -133,7 +138,6 @@
 
 			if (uid !== null) {
 				// Existing user
-				winston.info('User found inside get uid by oidc function');
 				callback(null, {
 					uid: uid
 				});
@@ -141,7 +145,6 @@
 				// New User
 				var success = function (uid) {
 					// Save specific information to the user
-					winston.info('Saving user information...');
 					user.setUserField(uid, 'oidcid', oidcid);
 					db.setObjectField('oidcid:uid', oidcid, uid);
 
@@ -157,8 +160,7 @@
 
 					if (!uid) {
                         username = username.split('@');
-						winston.info('Creating user...');
-						user.create({ username: username[0], email: email }, function (err, uid) {
+						user.create({ username: username[0], email: email, fullname: displayName }, function (err, uid) {
 							if (err) {
 								return callback(err);
 							}
@@ -166,7 +168,6 @@
 							success(uid);
 						});
 					} else {
-						winston.info('User found inside get uid by email function');
 						success(uid);
 					}
 				});
@@ -174,6 +175,12 @@
 		});
     };
 
+	/**
+    *   Adds the login vía OpenID and the Icon.
+    *
+    *   @param {Array} custom_header
+    *   @param {Function} callback
+    */
     Oidc.addMenuItem = function(custom_header, callback) {
 		custom_header.authentication.push({
 			'route': constants.admin.route,
@@ -182,8 +189,14 @@
 		});
 
 		callback(null, custom_header);
-    };
-
+	};
+	
+	/**
+    *   Gets the User's Uid in NodeBB by its Oidc.
+    *
+    *   @param {String} oidcid
+    *   @param {Function} callback
+    */
     Oidc.getUidByOidc = function (oidcid, callback) {
 		db.getObjectField('oidcid:uid', oidcid, function (err, uid) {
 			if (err) {
@@ -193,7 +206,13 @@
 		});
     };
 
-    /*
+	/**
+    *   Deletes the User's data.
+    *
+    *   @param {Object} data
+    *   @param {Function} callback
+    */
+   	/*
     Oidc.deleteUserData = function (data, callback) {
         var uid = data.uid;
 

@@ -13,11 +13,14 @@
 						You will need to paste <code>{baseUrl}/auth/oidc/callback</code> into the
 						<strong>"Redirect URIs"</strong> field on your OpenID Connect Server.
 					</li>
+					<li>
+						Fields with asterisk (<code>*</code>) are required.
+					</li>
 				</ul>
 				<form role="form" class="sso-oidc-settings">
 					<div class="form-group">
 						<label for="client_id"><code>*</code> Client ID</label>
-						<input type="text" id="client_id" name="client_id" title="Client ID" class="form-control" placeholder="Client ID"><br />
+						<input type="text" id="client_id" name="client_id" title="Client ID" class="form-control" placeholder="Client ID">
 					</div>
 					<div class="form-group">
 						<label for="client_secret"><code>*</code> Client Secret</label>
@@ -38,12 +41,6 @@
 					<div class="form-group">
 						<label for="user_info"><code>*</code> UserInfo Endpoint</label>
 						<input type="text" id="user_info" name="user_info" title="UserInfo" class="form-control" placeholder="https://my.domain.com/userinfo">
-					</div>
-					<div class="checkbox">
-						<label for="matchUser" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
-							<input type="checkbox" class="mdl-switch__input" id="matchUser" name="matchUser" />
-							<span class="mdl-switch__label">Match existing user by Email</span>
-						</label>
 					</div>
 					<p class="help-block">
 						Restricting registration means that only registered users can associate their account with this SSO strategy.
