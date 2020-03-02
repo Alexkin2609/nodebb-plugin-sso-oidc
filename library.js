@@ -5,9 +5,10 @@
         meta = require.main.require('./src/meta'),
         db = require.main.require('./src/database'),
         passport = require.main.require('passport'),
-        passportOpenID = require('passport-openidconnect').Strategy,
+		passportOpenID = require('passport-openidconnect').Strategy,
+		passportLocal = require.main.require('passport-local').Strategy,
+		controllers = require.main.require("./src/controllers"),
         nconf = require.main.require('nconf'),
-        //async = require.main.require('async'),
         winston = require.main.require('winston');
 
     var authenticationController = require.main.require('./src/controllers/authentication');
@@ -76,23 +77,23 @@
     *   @param {Array} strategies
     *   @param {Function} callback
     */
-    Oidc.getStrategy = function (strategies, callback) {
-        winston.info('Setting up openid strategy');
-        if (Oidc.settings !== undefined &&
+   Oidc.getStrategy = function (strategies, callback) {
+		winston.info('Setting up openid strategy');
+		if (Oidc.settings !== undefined &&
 			Oidc.settings.client_id && Oidc.settings.client_secret &&
 			Oidc.settings.base_url && Oidc.settings.login_authorize &&
 			Oidc.settings.token && Oidc.settings.user_info) {
-            passport.use(new passportOpenID({
-                issuer: Oidc.settings.base_url,
-                authorizationURL: Oidc.settings.login_authorize,
-                tokenURL: Oidc.settings.token,
-                userInfoURL: Oidc.settings.user_info,
-                clientID: Oidc.settings.client_id,
-                clientSecret: Oidc.settings.client_secret,
-                callbackURL: nconf.get('url') + '/auth/oidc/callback',
-                scope: 'openid email profile',
-                passReqToCallback: true,
-            }, function (req, iss, sub, profile, accessToken, refreshToken, verified) {
+			passport.use(new passportOpenID({
+				issuer: Oidc.settings.base_url,
+				authorizationURL: Oidc.settings.login_authorize,
+				tokenURL: Oidc.settings.token,
+				userInfoURL: Oidc.settings.user_info,
+				clientID: Oidc.settings.client_id,
+				clientSecret: Oidc.settings.client_secret,
+				callbackURL: nconf.get('url') + '/auth/oidc/callback',
+				scope: 'openid email profile',
+				passReqToCallback: true,
+			}, function (req, iss, sub, profile, accessToken, refreshToken, verified) {
 				if (req.hasOwnProperty('user') && req.user.hasOwnProperty('uid') && req.user.uid > 0) {
 					// Save specific information to the user
 					User.setUserField(req.user.uid, 'oidcid', profile.id);
@@ -109,18 +110,21 @@
 					verified(null, user);
 				});
 
-            }));
+			}));
+			
+			if(Oidc.settings.local_login === 'off') {
+				strategies.push({
+					name: 'openidconnect',
+					url: '/auth/oidc',
+					callbackURL: '/auth/oidc/callback',
+					icon: constants.admin.icon,
+					checkState: false
+				});
+			}
+		}
 
-            strategies.push({
-                name: 'openidconnect',
-                url: '/auth/oidc',
-                callbackURL: '/auth/oidc/callback',
-				icon: constants.admin.icon,
-				checkState: false
-            });
-        }
-        callback(null, strategies);
-    };
+		callback(null, strategies);
+	};
 
 	/**
     *   Logins a user.
@@ -160,7 +164,7 @@
 
 					if (!uid) {
                         username = username.split('@');
-						user.create({ username: username[0], email: email, fullname: displayName }, function (err, uid) {
+						user.create({ username: username[0], email: email }, function (err, uid) {
 							if (err) {
 								return callback(err);
 							}
@@ -173,7 +177,37 @@
 				});
 			}
 		});
-    };
+	};
+	
+	/**
+	 *   If the local_login setting is on, this creates the login
+	 * 	strategy as the Local Login.
+	 */
+	Oidc.localLogin = function() {
+		if(Oidc.settings.local_login === 'on') {
+			winston.info('[login] Registering new local login strategy');
+			passport.use(new passportLocal({passReqToCallback: true}, function (req, iss, sub, profile, accessToken, refreshToken, verified) {
+				if (req.hasOwnProperty('user') && req.user.hasOwnProperty('uid') && req.user.uid > 0) {
+					// Save specific information to the user
+					User.setUserField(req.user.uid, 'oidcid', profile.id);
+					db.setObjectField('oidcid:uid', profile.id, req.user.uid);
+					return verified(null, req.user);
+				}
+
+				Oidc.login(profile.id, profile._json.user_name, profile._json.email, function (err, user) {
+					if (err) {
+						return verified(err);
+					}
+
+					authenticationController.onSuccessfulLogin(req, user.uid);
+					verified(null, user);
+				});
+
+			}));
+		} else {
+			passport.use(new passportLocal({ passReqToCallback: true }, controllers.authentication.localLogin));
+		}
+	};
 
 	/**
     *   Adds the login vía OpenID and the Icon.

@@ -7,8 +7,9 @@
 	"templates": "templates",
 	"hooks": [
         { "hook": "static:app.load", "method": "init" },
-        { "hook": "filter:auth.init", "method": "getStrategy" },
-        { "hook": "filter:admin.header.build", "method": "addMenuItem" }
+		{ "hook": "filter:auth.init", "method": "getStrategy" },
+		{ "hook": "action:auth.overrideLogin", "method": "localLogin" },
+		{ "hook": "filter:admin.header.build", "method": "addMenuItem" }
 	],
 	"acpScripts": [
 		"static/lib/admin.js"

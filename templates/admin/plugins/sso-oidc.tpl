@@ -42,6 +42,12 @@
 						<label for="user_info"><code>*</code> UserInfo Endpoint</label>
 						<input type="text" id="user_info" name="user_info" title="UserInfo" class="form-control" placeholder="https://my.domain.com/userinfo">
 					</div>
+					<div class="checkbox">
+						<label for="local_login" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+							<input type="checkbox" class="mdl-switch__input" id="local_login" name="local_login" />
+							<span class="mdl-switch__label">Set as Local Login</span>
+						</label>
+					</div>
 					<p class="help-block">
 						Restricting registration means that only registered users can associate their account with this SSO strategy.
 						This restriction is useful if you have users bypassing registration controls by using OpenID Connect accounts, or
