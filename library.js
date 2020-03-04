@@ -112,7 +112,7 @@
 
 			}));
 			
-			if(Oidc.settings.local_login === 'off') {
+			// if(Oidc.settings.local_login === 'off') {
 				strategies.push({
 					name: 'openidconnect',
 					url: '/auth/oidc',
@@ -120,7 +120,7 @@
 					icon: constants.admin.icon,
 					checkState: false
 				});
-			}
+			// }
 		}
 
 		callback(null, strategies);
@@ -183,31 +183,31 @@
 	 *   If the local_login setting is on, this creates the login
 	 * 	strategy as the Local Login.
 	 */
-	Oidc.localLogin = function() {
-		if(Oidc.settings.local_login === 'on') {
-			winston.info('[login] Registering new local login strategy');
-			passport.use(new passportLocal({passReqToCallback: true}, function (req, iss, sub, profile, accessToken, refreshToken, verified) {
-				if (req.hasOwnProperty('user') && req.user.hasOwnProperty('uid') && req.user.uid > 0) {
-					// Save specific information to the user
-					User.setUserField(req.user.uid, 'oidcid', profile.id);
-					db.setObjectField('oidcid:uid', profile.id, req.user.uid);
-					return verified(null, req.user);
-				}
+	// Oidc.localLogin = function() {
+	// 	if(Oidc.settings.local_login === 'on') {
+	// 		winston.info('[login] Registering new local login strategy');
+	// 		passport.use(new passportLocal({passReqToCallback: true}, function (req, iss, sub, profile, accessToken, refreshToken, verified) {
+	// 			if (req.hasOwnProperty('user') && req.user.hasOwnProperty('uid') && req.user.uid > 0) {
+	// 				// Save specific information to the user
+	// 				User.setUserField(req.user.uid, 'oidcid', profile.id);
+	// 				db.setObjectField('oidcid:uid', profile.id, req.user.uid);
+	// 				return verified(null, req.user);
+	// 			}
 
-				Oidc.login(profile.id, profile._json.user_name, profile._json.email, function (err, user) {
-					if (err) {
-						return verified(err);
-					}
+	// 			Oidc.login(profile.id, profile._json.user_name, profile._json.email, function (err, user) {
+	// 				if (err) {
+	// 					return verified(err);
+	// 				}
 
-					authenticationController.onSuccessfulLogin(req, user.uid);
-					verified(null, user);
-				});
+	// 				authenticationController.onSuccessfulLogin(req, user.uid);
+	// 				verified(null, user);
+	// 			});
 
-			}));
-		} else {
-			passport.use(new passportLocal({ passReqToCallback: true }, controllers.authentication.localLogin));
-		}
-	};
+	// 		}));
+	// 	} else {
+	// 		passport.use(new passportLocal({ passReqToCallback: true }, controllers.authentication.localLogin));
+	// 	}
+	// };
 
 	/**
     *   Adds the login vía OpenID and the Icon.
@@ -238,7 +238,18 @@
 			}
 			callback(null, uid);
 		});
-    };
+	};
+	
+	/**
+    *   Enables nested replies
+    *
+    *   @param {Object} config
+    *   @param {Function} callback
+    */
+	Oidc.enableNestedReplies = function (config, callback) {
+        config.showNestedReplies = true;
+        setImmediate(callback, null, config);
+    }
 
 	/**
     *   Deletes the User's data.

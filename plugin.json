@@ -8,8 +8,8 @@
 	"hooks": [
         { "hook": "static:app.load", "method": "init" },
 		{ "hook": "filter:auth.init", "method": "getStrategy" },
-		{ "hook": "action:auth.overrideLogin", "method": "localLogin" },
-		{ "hook": "filter:admin.header.build", "method": "addMenuItem" }
+		{ "hook": "filter:admin.header.build", "method": "addMenuItem" },
+		{ "hook": "filter:config.get", "method": "enableNestedReplies" }
 	],
 	"acpScripts": [
 		"static/lib/admin.js"
