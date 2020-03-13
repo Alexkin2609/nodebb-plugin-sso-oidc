@@ -50,7 +50,7 @@
 				service: "OIDC",
 			});
         });
-		
+
 		/*
 		params.router.post('/deauth/oidc', [params.middleware.requireUser, params.middleware.applyCSRF], function (req, res, next) {
 			Oidc.deleteUserData({
@@ -83,6 +83,8 @@
 			Oidc.settings.client_id && Oidc.settings.client_secret &&
 			Oidc.settings.base_url && Oidc.settings.login_authorize &&
 			Oidc.settings.token && Oidc.settings.user_info) {
+			var baseurl = nconf.get('url');
+			baseurl = baseurl.substring(0,4) + 's' + baseurl.substring(4);
 			passport.use(new passportOpenID({
 				issuer: Oidc.settings.base_url,
 				authorizationURL: Oidc.settings.login_authorize,
@@ -90,7 +92,7 @@
 				userInfoURL: Oidc.settings.user_info,
 				clientID: Oidc.settings.client_id,
 				clientSecret: Oidc.settings.client_secret,
-				callbackURL: nconf.get('url') + '/auth/oidc/callback',
+				callbackURL: baseurl + '/auth/oidc/callback',
 				scope: 'openid email profile',
 				passReqToCallback: true,
 			}, function (req, iss, sub, profile, accessToken, refreshToken, verified) {
@@ -111,7 +113,7 @@
 				});
 
 			}));
-			
+
 			// if(Oidc.settings.local_login === 'off') {
 				strategies.push({
 					name: 'openidconnect',
@@ -178,7 +180,7 @@
 			}
 		});
 	};
-	
+
 	/**
 	 *   If the local_login setting is on, this creates the login
 	 * 	strategy as the Local Login.
@@ -224,7 +226,7 @@
 
 		callback(null, custom_header);
 	};
-	
+
 	/**
     *   Gets the User's Uid in NodeBB by its Oidc.
     *
@@ -239,7 +241,7 @@
 			callback(null, uid);
 		});
 	};
-	
+
 	/**
     *   Enables nested replies
     *
